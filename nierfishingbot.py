@@ -3,7 +3,7 @@ import ctypes
 import time
 import soundcard
 
-# ahttps://stackoverflow.com/questions/14489013/simulate-python-keypresses-for-controlling-a-game
+# https://stackoverflow.com/questions/14489013/simulate-python-keypresses-for-controlling-a-game
 SendInput = ctypes.windll.user32.SendInput
 
 ESC = 0x01
@@ -47,16 +47,16 @@ class Input(ctypes.Structure):
                 ("ii", Input_I)]
 
 
-def PressKey(hexKeyCode, holdLength=0.1):
+def presskey(hexkeycode, holdlength=0.1):
     extra = ctypes.c_ulong(0)
     ii_ = Input_I()
-    ii_.ki = KeyBdInput(0, hexKeyCode, 0x0008, 0, ctypes.pointer(extra))
+    ii_.ki = KeyBdInput(0, hexkeycode, 0x0008, 0, ctypes.pointer(extra))
     x = Input(ctypes.c_ulong(1), ii_)
     SendInput(1, ctypes.pointer(x), ctypes.sizeof(x))
-    time.sleep(holdLength)
+    time.sleep(holdlength)
     extra = ctypes.c_ulong(0)
     ii_ = Input_I()
-    ii_.ki = KeyBdInput(0, hexKeyCode, 0x0008 | 0x0002, 0,
+    ii_.ki = KeyBdInput(0, hexkeycode, 0x0008 | 0x0002, 0,
                         ctypes.pointer(extra))
     x = Input(ctypes.c_ulong(1), ii_)
     SendInput(1, ctypes.pointer(x), ctypes.sizeof(x))
@@ -64,11 +64,11 @@ def PressKey(hexKeyCode, holdLength=0.1):
 
 pyautogui.hotkey('alt', 'tab')
 time.sleep(1)
-PressKey(ESC)
+presskey(ESC)
 time.sleep(2)
 while True:
-    PressKey(DOWN, 2)
-    PressKey(ENTER)
+    presskey(DOWN, 2)
+    presskey(ENTER)
     time.sleep(3)
 
     mic = soundcard.default_microphone()
@@ -90,7 +90,7 @@ while True:
                 catch = True
                 break
 
-    PressKey(ENTER)
+    presskey(ENTER)
     if catch:
         time.sleep(9)
     else:
