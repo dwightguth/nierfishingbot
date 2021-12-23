@@ -2,6 +2,7 @@ import pyautogui
 import ctypes
 import time
 import soundcard
+import argparse
 
 # https://stackoverflow.com/questions/14489013/simulate-python-keypresses-for-controlling-a-game
 SendInput = ctypes.windll.user32.SendInput
@@ -63,25 +64,25 @@ def presskey(hexkeycode, holdlength=0.1):
 
 
 pyautogui.FAILSAFE = False
-pyautogui.hotkey('alt', 'tab')
-time.sleep(1)
-presskey(ESC)
-time.sleep(2)
-DEBUG = False
-speaker = soundcard.default_speaker()
-alldata = []
-while not DEBUG:
-    # DEBUG = True
-    presskey(DOWN, 2)
-    presskey(ENTER)
-    time.sleep(3)
 
-    mic = soundcard.default_microphone()
-    WINDOW = 10
-    CASTINGTIME = 20
-    THRESHOLD = 0.03
-    FREQUENCY=48000
-    catch = False
+parser = argparse.ArgumentParser(description="NieR Automata Fishing Bot")
+parser.add_argument("--debug", action="store_true", help="Debug Stereo Mix", default=False)
+parser.add_argument("--window", type=int, help="Number of times to sample audio per second", default=10)
+parser.add_argument("--cast-time", type=int, help="Seconds to wait before reeling back in", default=20)
+parser.add_argument("--threshold", type=float, required=True, help="Audio amplitude to treat as a fish on the line")
+parser.add_argument("--frequency", type=int, help="Frequency of Sound Device", default=48000)
+args = parser.parse_args()
+
+DEBUG = args.debug
+WINDOW = args.window
+CASTINGTIME = args.cast_time
+THRESHOLD = args.threshold
+FREQUENCY = args.frequency
+
+speaker = soundcard.default_speaker()
+mic = soundcard.default_microphone()
+
+def wait_for_catch(alldata):
     with mic.recorder(samplerate=FREQUENCY) as recorder:
         for _ in range(WINDOW * CASTINGTIME):
             data = recorder.record(numframes=(FREQUENCY // WINDOW))
@@ -95,16 +96,33 @@ while not DEBUG:
             if volume >= THRESHOLD:
                 print("CATCH!")
                 print('\a')
-                catch = True
-                break
+                return True
+    return False
 
-    presskey(ENTER)
-    if catch:
-        time.sleep(9)
-    else:
-        time.sleep(3)
-
-if DEBUG:
+def fishing_loop():
     pyautogui.hotkey('alt', 'tab')
-    for data in alldata:
-        speaker.play(data, samplerate=FREQUENCY)
+    time.sleep(1)
+    presskey(ESC)
+    time.sleep(2)
+    alldata = []
+    once = True
+    while once or not DEBUG:
+        once = False
+        presskey(DOWN, 2)
+        presskey(ENTER)
+        time.sleep(3)
+    
+        catch = wait_for_catch(alldata)
+   
+        presskey(ENTER)
+        if catch:
+            time.sleep(9)
+        else:
+            time.sleep(3)
+    
+    if DEBUG:
+        pyautogui.hotkey('alt', 'tab')
+        for data in alldata:
+            speaker.play(data, samplerate=FREQUENCY)
+
+fishing_loop()
