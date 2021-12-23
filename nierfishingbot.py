@@ -67,7 +67,11 @@ pyautogui.hotkey('alt', 'tab')
 time.sleep(1)
 presskey(ESC)
 time.sleep(2)
-while True:
+DEBUG = False
+speaker = soundcard.default_speaker()
+alldata = []
+while not DEBUG:
+    DEBUG = True
     presskey(DOWN, 2)
     presskey(ENTER)
     time.sleep(3)
@@ -81,6 +85,8 @@ while True:
     with mic.recorder(samplerate=FREQUENCY) as recorder:
         for _ in range(WINDOW * CASTINGTIME):
             data = recorder.record(numframes=(FREQUENCY // WINDOW))
+            if DEBUG:
+                alldata.append(data)
             volume = 0.0
             for frame in data:
                 volume += abs(frame[0]) + abs(frame[1])
@@ -97,3 +103,8 @@ while True:
         time.sleep(9)
     else:
         time.sleep(3)
+
+if DEBUG:
+    pyautogui.hotkey('alt', 'tab')
+    for data in alldata:
+        speaker.play(data, samplerate=FREQUENCY)
