@@ -62,6 +62,7 @@ def presskey(hexkeycode, holdlength=0.1):
     SendInput(1, ctypes.pointer(x), ctypes.sizeof(x))
 
 
+pyautogui.FAILSAFE = False
 pyautogui.hotkey('alt', 'tab')
 time.sleep(1)
 presskey(ESC)
