@@ -75,15 +75,16 @@ while True:
     mic = soundcard.default_microphone()
     WINDOW = 10
     CASTINGTIME = 20
-    THRESHOLD = 0.04
+    THRESHOLD = 0.03
+    FREQUENCY=48000
     catch = False
-    with mic.recorder(samplerate=44100) as recorder:
+    with mic.recorder(samplerate=FREQUENCY) as recorder:
         for _ in range(WINDOW * CASTINGTIME):
-            data = recorder.record(numframes=(44100 // WINDOW))
+            data = recorder.record(numframes=(FREQUENCY // WINDOW))
             volume = 0.0
             for frame in data:
                 volume += abs(frame[0]) + abs(frame[1])
-            volume /= 44100 / WINDOW
+            volume /= FREQUENCY / WINDOW
             print(volume)
             if volume >= THRESHOLD:
                 print("CATCH!")
