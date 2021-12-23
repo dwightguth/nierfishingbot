@@ -8,7 +8,7 @@ For installation instructions, see INSTALL.md.
 2. Disable music and voice volume in your settings for the game
 3. Kill any other open applications that might make sounds.
 4. Begin fishing by holding down the E key.
-4. Alt tab to your command prompt and run `python nierfishingbot.py`
+4. Alt tab to your command prompt and run `py nierfishingbot.py`
 5. Sit back and let it fish until it's caught the fish you want.
 6. Alt tab back to the command prompt and press ctrl-c to kill the bot.
 
