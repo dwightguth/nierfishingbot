@@ -12,6 +12,16 @@ For installation instructions, see INSTALL.md.
 5. Sit back and let it fish until it's caught the fish you want.
 6. Alt tab back to the command prompt and press ctrl-c to kill the bot.
 
+## Tested Fishing Locations
+
+The following fishing locations have been tested and the bot ought to be able to catch fish at them if it has been calibrated correctly:
+
+* City Ruins - Streams/Waterfalls (tested in pond by Resistance Camp)
+* Desert Zone - Oil Field
+* Desert Zone - Oasis
+
+Other locations may or may not work correctly.
+
 ## Troubleshooting
 
 If the bot is failing to catch fish, this can be due to a couple of different reasons. First, you might be fishing in a body of water that isn't well supported yet. For example, the amusement park has loud fireworks in the background that interfere with the very simplistic audio processing the script currently does to detect a fish on the line. I have tested it with the desert oasis and the pond by the resistance camp, but other locations may or may not work in the current version.
