@@ -71,7 +71,7 @@ DEBUG = False
 speaker = soundcard.default_speaker()
 alldata = []
 while not DEBUG:
-    DEBUG = True
+    # DEBUG = True
     presskey(DOWN, 2)
     presskey(ENTER)
     time.sleep(3)
